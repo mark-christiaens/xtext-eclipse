@@ -10,6 +10,8 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.xtext.builder.builderState.IBuilderState;
 import org.eclipse.xtext.builder.clustering.CurrentDescriptions;
 import org.eclipse.xtext.builder.impl.PersistentDataAwareDirtyResource;
+import org.eclipse.xtext.builder.preferences.XtextBuildPreferenceEvaluator;
+import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.resource.IContainer;
 import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.containers.StateBasedContainerManager;
@@ -27,7 +29,7 @@ import org.eclipse.xtext.ui.editor.outline.impl.IOutlineTreeStructureProvider;
 import org.eclipse.xtext.ui.editor.outline.impl.OutlineFilterAndSorter.IComparator;
 import org.eclipse.xtext.ui.editor.outline.impl.OutlineNodeLabelProvider;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
-import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ui.preferences.IBuildPreferenceEvaluator;
 import org.eclipse.xtext.ui.refactoring.IDependentElementsCalculator;
 import org.eclipse.xtext.ui.refactoring.IRenameStrategy;
 import org.eclipse.xtext.ui.refactoring.ui.IRenameContextFactory;
@@ -184,5 +186,8 @@ public class XtextUiModule extends AbstractXtextUiModule {
 	public void configureEditorScope(Binder binder) {
 		binder.bindConstant().annotatedWith(Names.named(XtextEditor.KEY_BINDING_SCOPE)).to("org.eclipse.xtext.xtext.ui.XtextEditorScope");
 	}
-	
+
+	public Class<? extends IBuildPreferenceEvaluator> bindIBuildPreferenceEvaluator() {
+		return XtextBuildPreferenceEvaluator.class;
+	}
 }

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -51,8 +50,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.eclipse.xtext.ui.editor.preferences.PreferenceStoreAccessImpl;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapDifference;
@@ -72,6 +69,9 @@ public abstract class OptionsConfigurationBlock {
 
 	@Inject
 	protected PreferenceStoreAccessImpl preferenceStoreAccessImpl;
+
+	@Inject
+	private IBuildPreferenceEvaluator buildPreferenceEvaluator;
 
 	private static final String IS_PROJECT_SPECIFIC = "is_project_specific"; //$NON-NLS-1$
 	private static final String SETTINGS_EXPANDED = "expanded"; //$NON-NLS-1$
@@ -531,7 +531,7 @@ public abstract class OptionsConfigurationBlock {
 	}
 
 	protected boolean processChanges(IWorkbenchPreferenceContainer container) {
-		boolean needsBuild = !getBuildAffectingPreferenceChanges().isEmpty();
+		boolean needsBuild = buildPreferenceEvaluator.isAffectingBuild(getPreferenceChanges());
 		boolean doBuild = false;
 		if (needsBuild) {
 			int count = getRebuildCount();
@@ -582,16 +582,6 @@ public abstract class OptionsConfigurationBlock {
 	private void logError(String text, IOException e) {
 		IStatus status = new Status(IStatus.ERROR, uiPlugin.getBundle().getSymbolicName(), text, e);
 		uiPlugin.getLog().log(status);
-	}
-
-	public Map<String, ValueDifference<String>> getBuildAffectingPreferenceChanges() {
-		Map<String, ValueDifference<String>> changes = getPreferenceChanges();
-		Map<String, ValueDifference<String>> buildAffectingChanges = Maps.filterEntries(changes, getAffectsBuilderPredicate());
-		return buildAffectingChanges;
-	}
-
-	protected Predicate<Entry<String, ValueDifference<String>>> getAffectsBuilderPredicate() {
-		return Predicates.alwaysTrue();
 	}
 
 	public Map<String, ValueDifference<String>> getPreferenceChanges() {

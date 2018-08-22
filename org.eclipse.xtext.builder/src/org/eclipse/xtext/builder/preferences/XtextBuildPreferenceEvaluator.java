@@ -7,25 +7,27 @@
  *******************************************************************************/
 package org.eclipse.xtext.builder.preferences;
 
+import static org.eclipse.xtext.builder.EclipseOutputConfigurationProvider.*;
+
 import java.util.Map.Entry;
 
 import org.eclipse.xtext.builder.EclipseOutputConfigurationProvider;
 import org.eclipse.xtext.ui.editor.preferences.PreferenceConstants;
+import org.eclipse.xtext.ui.preferences.IBuildPreferenceEvaluator;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.MapDifference.ValueDifference;
 
-import static org.eclipse.xtext.builder.EclipseOutputConfigurationProvider.*;
-
 /**
+ * @since 2.15
  * @author Titouan Vervack - Initial contribution and API
  */
-public class AffectsBuilderPredicate implements Predicate<Entry<String, ValueDifference<String>>> {
+public class XtextBuildPreferenceEvaluator implements IBuildPreferenceEvaluator {
+
 	private static final String PREFIX = EclipseOutputConfigurationProvider.OUTPUT_PREFERENCE_TAG + PreferenceConstants.SEPARATOR;
 
 	@Override
-	public boolean apply(Entry<String, ValueDifference<String>> input) {
-		String key = input.getKey();
+	public boolean hasBuildAffectingChanges(Entry<String, ValueDifference<String>> preference) {
+		String key = preference.getKey();
 		if (key.startsWith(PREFIX)) {
 			String keyName = key.substring(key.lastIndexOf(PreferenceConstants.SEPARATOR) + 1);
 			switch (keyName) {

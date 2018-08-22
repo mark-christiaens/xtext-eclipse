@@ -8,7 +8,6 @@
 package org.eclipse.xtext.builder.preferences;
 
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
@@ -42,9 +41,7 @@ import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreAccess;
 import org.eclipse.xtext.ui.preferences.OptionsConfigurationBlock;
 import org.eclipse.xtext.ui.preferences.ScrolledPageContent;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-import com.google.common.collect.MapDifference.ValueDifference;
 import com.google.inject.Inject;
 
 /**
@@ -56,8 +53,6 @@ public class BuilderConfigurationBlock extends OptionsConfigurationBlock {
 	
 	protected static final String[] BOOLEAN_VALUES = new String[] { IPreferenceStore.TRUE, IPreferenceStore.FALSE };
 
-	private static final Predicate<Entry<String, ValueDifference<String>>> AFFECTS_BUILDER_PREDICATE = new AffectsBuilderPredicate();
-	
 	protected static final int INDENT_AMOUNT = 32;
 	
 	public static final String SETTINGS_SECTION_NAME = "BuilderConfigurationBlock"; //$NON-NLS-1$
@@ -391,10 +386,5 @@ public class BuilderConfigurationBlock extends OptionsConfigurationBlock {
 	@Override
 	public String getPropertyPrefix() {
 		return PROPERTY_PREFIX;
-	}
-
-	@Override
-	protected Predicate<Entry<String, ValueDifference<String>>> getAffectsBuilderPredicate() {
-		return AFFECTS_BUILDER_PREDICATE;
 	}
 }
