@@ -28,6 +28,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipse.xtext.builder.preferences.XtextBuildPreferenceEvaluator;
 import org.eclipse.xtext.formatting.IIndentationInformation;
 import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.generator.IShouldGenerate;
@@ -105,6 +106,7 @@ import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
 import org.eclipse.xtext.ui.label.InjectableAdapterFactoryLabelProvider;
 import org.eclipse.xtext.ui.markers.IMarkerContributor;
 import org.eclipse.xtext.ui.preferences.EclipsePreferencesProvider;
+import org.eclipse.xtext.ui.preferences.IBuildPreferenceEvaluator;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 import org.eclipse.xtext.ui.resource.XtextResourceSetProvider;
 import org.eclipse.xtext.ui.tasks.TaskMarkerContributor;
@@ -451,5 +453,12 @@ public class DefaultUiModule extends AbstractGenericModule {
 	public void configureSpellChecker(Binder binder) {
 		binder.bind(IReconcileStrategyFactory.class).annotatedWith(Names.named("spellChecker")) //$NON-NLS-1$
 		.to(XtextSpellingReconcileStrategy.Factory.class);
+	}
+
+	/**
+	 * @since 2.15
+	 */
+	public Class<? extends IBuildPreferenceEvaluator> bindIBuildPreferenceEvaluator() {
+		return XtextBuildPreferenceEvaluator.class;
 	}
 }
